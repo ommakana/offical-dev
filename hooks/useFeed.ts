@@ -90,7 +90,7 @@ const INITIAL_STATE: FeedState = {
   loading: true,
   error: null,
   fetchedAt: null,
-  category: 'all',
+  category: 'webdev', // Web / App tab is the home base
 };
 
 // ── Cache helpers ───────────────────────────────────────────────────────────

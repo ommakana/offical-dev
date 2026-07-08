@@ -14,6 +14,12 @@ export const metadata: Metadata = {
   title: 'Official Dev',
   description: 'Your curated dev news, sport news, jobs and more — in one place.',
   manifest: '/manifest.json',
+  icons: {
+    // SVG works in all modern browsers; no PNG generation needed
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
 };
 
 export const viewport: Viewport = {
