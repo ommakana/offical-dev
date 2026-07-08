@@ -38,7 +38,7 @@ export function CategoryFilter({ active, onChange }: CategoryFilterProps) {
             ${
               active === cat.id
                 ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/20'
-                : 'bg-surface-card border-surface-border text-slate-400 hover:text-white hover:border-slate-500'
+                : 'bg-surface-card border-surface-border text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-400 dark:hover:border-slate-500'
             }
           `}
           aria-pressed={active === cat.id}

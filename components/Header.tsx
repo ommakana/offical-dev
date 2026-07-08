@@ -43,7 +43,7 @@ export function Header({ fetchedAt, loading, onRefresh, totalCount }: HeaderProp
               </svg>
             </div>
             <div className="min-w-0">
-              <h1 className="text-base sm:text-lg font-bold text-white truncate leading-none">
+              <h1 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white truncate leading-none">
                 Official Dev
               </h1>
               {totalCount > 0 && (
@@ -67,7 +67,7 @@ export function Header({ fetchedAt, loading, onRefresh, totalCount }: HeaderProp
               ${
                 loading
                   ? 'text-slate-600 cursor-not-allowed'
-                  : 'text-slate-400 hover:text-white hover:border-slate-500'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-400 dark:hover:border-slate-500'
               }
             `}
             aria-label="Refresh feed"

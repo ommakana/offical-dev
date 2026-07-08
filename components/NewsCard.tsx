@@ -71,8 +71,8 @@ export function NewsCard({ item, index }: NewsCardProps) {
         href={item.url}
         target="_blank"
         rel="noopener noreferrer"
-        className="block text-sm sm:text-base font-semibold text-slate-100 leading-snug
-                   group-hover:text-indigo-300 transition-colors duration-150 line-clamp-3"
+        className="block text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 leading-snug
+                   group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition-colors duration-150 line-clamp-3"
       >
         {item.title}
       </a>
@@ -90,7 +90,7 @@ export function NewsCard({ item, index }: NewsCardProps) {
           {item.tags.map((tag) => (
             <span
               key={tag}
-              className="px-2 py-0.5 rounded-md text-xs bg-slate-800 text-slate-400 border border-slate-700"
+              className="px-2 py-0.5 rounded-md text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700"
             >
               #{tag}
             </span>

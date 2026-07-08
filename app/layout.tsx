@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`dark ${inter.variable}`}>
+    <html lang="en" className={inter.variable}>
       <head>
         {/* Preconnect to news API origins — fetches start before JS finishes */}
         <link rel="preconnect" href="https://hacker-news.firebaseio.com" />

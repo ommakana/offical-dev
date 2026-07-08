@@ -2,23 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    color-scheme: dark;
-  }
+/* ── System-theme CSS variables ────────────────────────────────────────────
+   Light values are the default. Dark values kick in when the OS is dark.
+   All custom Tailwind surface-* colors reference these vars, so the whole
+   palette flips automatically with zero JavaScript.
+   ───────────────────────────────────────────────────────────────────────── */
+:root {
+  color-scheme: light dark;
 
+  --surface:        #f8fafc;
+  --surface-card:   #ffffff;
+  --surface-hover:  #f1f5f9;
+  --surface-border: #e2e8f0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface:        #0f1117;
+    --surface-card:   #1a1d27;
+    --surface-hover:  #1f2233;
+    --surface-border: #2a2d3e;
+  }
+}
+
+@layer base {
   * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    @apply bg-surface text-slate-100 font-sans;
+    @apply bg-surface font-sans;
     /* Smooth momentum scroll on iOS */
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Remove scrollbar on category pill row without hiding content */
+  /* Hide scrollbar on category pill row without clipping content */
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;

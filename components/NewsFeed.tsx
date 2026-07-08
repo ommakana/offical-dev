@@ -36,7 +36,7 @@ export function NewsFeed() {
   });
 
   return (
-    <div className="min-h-screen bg-surface text-white">
+    <div className="min-h-screen bg-surface text-slate-900 dark:text-slate-100">
       <Header
         fetchedAt={fetchedAt}
         loading={loading}
