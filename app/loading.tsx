@@ -1,3 +1,5 @@
+import { QuoteBar } from '@/components/QuoteBar';
+
 function SkeletonPill() {
   return <div className="h-5 w-16 rounded-full bg-slate-200 dark:bg-slate-800 animate-pulse" />;
 }
@@ -50,6 +52,8 @@ export default function Loading() {
           </div>
         </div>
       </header>
+
+      <QuoteBar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         <div className="flex gap-2">

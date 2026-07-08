@@ -7,6 +7,7 @@ import { Header } from './Header';
 import { CategoryFilter } from './CategoryFilter';
 import { NewsCard } from './NewsCard';
 import { SkeletonCard } from './SkeletonCard';
+import { QuoteBar } from './QuoteBar';
 
 const SKELETON_COUNT = 9;
 
@@ -43,6 +44,7 @@ export function NewsFeed() {
         onRefresh={refresh}
         totalCount={allItems.length}
       />
+      <QuoteBar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         {/* Category filter */}
