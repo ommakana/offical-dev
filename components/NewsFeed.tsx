@@ -16,6 +16,7 @@ export function NewsFeed() {
     visibleItems,
     allItems,
     loading,
+    backgroundLoading,
     error,
     hasMore,
     fetchedAt,
@@ -49,6 +50,15 @@ export function NewsFeed() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         {/* Category filter */}
         <CategoryFilter active={category} onChange={setCategory} />
+
+        {/* Background loading pill — visible while HN + Reddit stream in */}
+        {backgroundLoading && !loading && (
+          <div className="flex items-center gap-2 text-xs text-slate-400 dark:text-slate-500"
+               role="status" aria-live="polite">
+            <div className="w-3 h-3 rounded-full border border-indigo-400 border-t-transparent animate-spin" />
+            <span>Loading more sources&hellip;</span>
+          </div>
+        )}
 
         {/* Error state */}
         {error && !loading && (

@@ -10,7 +10,10 @@ interface FeedState {
   visibleItems: NewsItem[];
   page: number;
   hasMore: boolean;
+  /** True only during the initial skeleton phase (no items yet) */
   loading: boolean;
+  /** True while the full feed (HN + Reddit) loads in the background */
+  backgroundLoading: boolean;
   error: string | null;
   fetchedAt: number | null;
   category: NewsCategory;
@@ -20,14 +23,26 @@ type FeedAction =
   | { type: 'FETCH_START' }
   | { type: 'FETCH_SUCCESS'; payload: { items: NewsItem[]; fetchedAt: number } }
   | { type: 'FETCH_ERROR'; payload: string }
+  | { type: 'BACKGROUND_START' }
+  /** Merges the full dataset in without resetting what the user already sees */
+  | { type: 'MERGE_FULL'; payload: { items: NewsItem[]; fetchedAt: number } }
   | { type: 'LOAD_MORE' }
   | { type: 'SET_CATEGORY'; payload: NewsCategory }
   | { type: 'REFRESH' };
+
+// ── Pure helpers ───────────────────────────────────────────────────────────
 
 function filterByCategory(items: NewsItem[], category: NewsCategory): NewsItem[] {
   if (category === 'all') return items;
   return items.filter((i) => i.category === category);
 }
+
+function deduplicateById(existing: NewsItem[], incoming: NewsItem[]): NewsItem[] {
+  const seen = new Set(existing.map((i) => i.id));
+  return incoming.filter((i) => !seen.has(i.id));
+}
+
+// ── Reducer ────────────────────────────────────────────────────────────────
 
 function reducer(state: FeedState, action: FeedAction): FeedState {
   switch (action.type) {
@@ -49,7 +64,29 @@ function reducer(state: FeedState, action: FeedAction): FeedState {
     }
 
     case 'FETCH_ERROR':
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, backgroundLoading: false, error: action.payload };
+
+    case 'BACKGROUND_START':
+      return { ...state, backgroundLoading: true };
+
+    case 'MERGE_FULL': {
+      // Combine existing items with net-new ones from the full fetch
+      const fresh = deduplicateById(state.allItems, action.payload.items);
+      const merged = [...state.allItems, ...fresh];
+
+      const filtered = filterByCategory(merged, state.category);
+      const currentVisible = state.visibleItems.length;
+
+      return {
+        ...state,
+        backgroundLoading: false,
+        allItems: merged,
+        // Keep whatever the user already sees — just extend hasMore
+        visibleItems: filtered.slice(0, Math.max(currentVisible, PAGE_SIZE)),
+        hasMore: filtered.length > Math.max(currentVisible, PAGE_SIZE),
+        fetchedAt: action.payload.fetchedAt,
+      };
+    }
 
     case 'LOAD_MORE': {
       const filtered = filterByCategory(state.allItems, state.category);
@@ -88,9 +125,10 @@ const INITIAL_STATE: FeedState = {
   page: 1,
   hasMore: false,
   loading: true,
+  backgroundLoading: false,
   error: null,
   fetchedAt: null,
-  category: 'webdev', // Web / App tab is the home base
+  category: 'webdev',
 };
 
 // ── Cache helpers ───────────────────────────────────────────────────────────
@@ -123,6 +161,7 @@ export function useFeed() {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
   const fetchFeed = useCallback(async (force = false) => {
+    // --- Cached path: skip the network entirely ---
     if (!force) {
       const cached = readCache();
       if (cached) {
@@ -131,16 +170,32 @@ export function useFeed() {
       }
     }
 
+    // --- Phase 1: web-only stories (Dev.to), shows up fast ---
     dispatch({ type: 'FETCH_START' });
     try {
-      const res = await fetch('/api/feed');
-      if (!res.ok) throw new Error(`API error ${res.status}`);
-      const data: { items: NewsItem[]; fetchedAt: number } = await res.json();
-      writeCache(data.items, data.fetchedAt);
-      dispatch({ type: 'FETCH_SUCCESS', payload: data });
+      const webRes = await fetch('/api/feed/web');
+      if (!webRes.ok) throw new Error(`Web API error ${webRes.status}`);
+      const webData: { items: NewsItem[]; fetchedAt: number } = await webRes.json();
+      dispatch({ type: 'FETCH_SUCCESS', payload: webData });
     } catch (err) {
+      // Phase 1 failed — skip to phase 2 which has the full dataset
       dispatch({ type: 'FETCH_ERROR', payload: (err as Error).message });
     }
+
+    // --- Phase 2: full feed (HN + Reddit + Dev.to) in the background ---
+    dispatch({ type: 'BACKGROUND_START' });
+    try {
+      const fullRes = await fetch('/api/feed');
+      if (!fullRes.ok) throw new Error(`Full feed API error ${fullRes.status}`);
+      const fullData: { items: NewsItem[]; fetchedAt: number } = await fullRes.json();
+      writeCache(fullData.items, fullData.fetchedAt);
+      dispatch({ type: 'MERGE_FULL', payload: fullData });
+    } catch (err) {
+      // Background fetch failed — not catastrophic, we already have phase 1 content
+      console.warn('[useFeed] background fetch failed:', err);
+      dispatch({ type: 'MERGE_FULL', payload: { items: state.allItems, fetchedAt: Date.now() } });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const refresh = useCallback(() => {
