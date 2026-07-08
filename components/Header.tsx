@@ -44,7 +44,7 @@ export function Header({ fetchedAt, loading, onRefresh, totalCount }: HeaderProp
             </div>
             <div className="min-w-0">
               <h1 className="text-base sm:text-lg font-bold text-white truncate leading-none">
-                Developer Feed
+                Official Dev News
               </h1>
               {totalCount > 0 && (
                 <p className="text-xs text-slate-500 mt-0.5">

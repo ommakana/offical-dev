@@ -1,7 +1,7 @@
 {
-  "name": "Developer Feed",
-  "short_name": "DevFeed",
-  "description": "Curated tech news for developers",
+  "name": "Official Dev News",
+  "short_name": "DevNews",
+  "description": "Curated fullstack & tech news for developers",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f1117",

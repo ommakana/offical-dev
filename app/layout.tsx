@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Developer Feed',
-  description: 'Your curated tech news from Hacker News, Dev.to, and Reddit — in one place.',
+  title: 'Official Dev News',
+  description: 'Your curated fullstack & tech news from Hacker News, Dev.to, and Reddit — in one place.',
   manifest: '/manifest.json',
 };
 

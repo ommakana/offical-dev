@@ -9,6 +9,7 @@ interface Category {
 
 const CATEGORIES: Category[] = [
   { id: 'all',           label: 'All' },
+  { id: 'webdev',        label: 'Web / App' },
   { id: 'trending',      label: 'Trending' },
   { id: 'devnews',       label: 'Dev News' },
   { id: 'bestpractices', label: 'Best Practices' },

@@ -1,11 +1,19 @@
 import { NewsCategory, NewsItem } from '@/types/news';
 
 const SUBREDDITS: { name: string; category: NewsCategory }[] = [
-  { name: 'programming',      category: 'devnews' },
-  { name: 'technology',       category: 'trending' },
-  { name: 'devops',           category: 'devops' },
-  { name: 'MachineLearning',  category: 'aiml' },
-  { name: 'ExperiencedDevs',  category: 'bestpractices' },
+  // Fullstack / web / app — these surface first in the ranked feed
+  { name: 'webdev',          category: 'webdev' },
+  { name: 'reactjs',         category: 'webdev' },
+  { name: 'node',            category: 'webdev' },
+  { name: 'Frontend',        category: 'webdev' },
+  { name: 'FlutterDev',      category: 'webdev' },
+  // General dev
+  { name: 'programming',     category: 'devnews' },
+  { name: 'ExperiencedDevs', category: 'bestpractices' },
+  // Broader tech
+  { name: 'technology',      category: 'trending' },
+  { name: 'devops',          category: 'devops' },
+  { name: 'MachineLearning', category: 'aiml' },
 ];
 
 interface RedditChild {
@@ -27,13 +35,13 @@ interface RedditChild {
 
 async function fetchSubreddit(
   subreddit: string,
-  limit = 10
+  limit = 8
 ): Promise<RedditChild[]> {
   try {
     const res = await fetch(
       `https://www.reddit.com/r/${subreddit}/hot.json?limit=${limit}`,
       {
-        headers: { 'User-Agent': 'developer-feed/1.0 (personal news aggregator)' },
+        headers: { 'User-Agent': 'official-dev-news/1.0 (personal news aggregator)' },
         next: { revalidate: 600 },
       }
     );
@@ -63,7 +71,10 @@ export async function fetchReddit(): Promise<NewsItem[]> {
             commentUrl: `https://reddit.com${c.data.permalink}`,
             author: c.data.author,
             publishedAt: new Date(c.data.created_utc * 1000).toISOString(),
-            tags: [name, ...(c.data.link_flair_text ? [c.data.link_flair_text] : [])].slice(0, 3),
+            tags: [
+              name,
+              ...(c.data.link_flair_text ? [c.data.link_flair_text] : []),
+            ].slice(0, 3),
             domain: c.data.is_self ? `r/${name}` : c.data.domain,
             category,
           }))

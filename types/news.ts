@@ -2,6 +2,7 @@ export type NewsSource = 'hackernews' | 'devto' | 'reddit';
 
 export type NewsCategory =
   | 'all'
+  | 'webdev'
   | 'trending'
   | 'devnews'
   | 'bestpractices'
