@@ -24,6 +24,10 @@ npm start
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
 
+## Live Demo
+
+Visit the production app at [https://offical-dev.vercel.app/](https://offical-dev.vercel.app/)
+
 ## Features
 
 - Multi-source news aggregation (Dev.to, Hacker News, Reddit)
