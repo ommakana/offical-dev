@@ -10,18 +10,19 @@
 :root {
   color-scheme: light dark;
 
-  --surface:        #f8fafc;
-  --surface-card:   #ffffff;
-  --surface-hover:  #f1f5f9;
-  --surface-border: #e2e8f0;
+  /* RGB channels — required for Tailwind opacity modifiers (bg-surface/90 etc.) */
+  --surface-rgb:        248 250 252;
+  --surface-card-rgb:   255 255 255;
+  --surface-hover-rgb:  241 245 249;
+  --surface-border-rgb: 226 232 240;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --surface:        #0f1117;
-    --surface-card:   #1a1d27;
-    --surface-hover:  #1f2233;
-    --surface-border: #2a2d3e;
+    --surface-rgb:        15 17 23;
+    --surface-card-rgb:   26 29 39;
+    --surface-hover-rgb:  31 34 51;
+    --surface-border-rgb: 42 45 62;
   }
 }
 

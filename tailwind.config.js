@@ -13,10 +13,12 @@ module.exports = {
       },
       colors: {
         surface: {
-          DEFAULT: '#0f1117',
-          card: '#1a1d27',
-          hover: '#1f2233',
-          border: '#2a2d3e',
+          // CSS-variable references — rgb() channel pattern so Tailwind opacity
+          // modifiers like bg-surface/90 keep working (e.g. header glassmorphism)
+          DEFAULT: 'rgb(var(--surface-rgb) / <alpha-value>)',
+          card:    'rgb(var(--surface-card-rgb) / <alpha-value>)',
+          hover:   'rgb(var(--surface-hover-rgb) / <alpha-value>)',
+          border:  'rgb(var(--surface-border-rgb) / <alpha-value>)',
         },
         accent: {
           hn: '#ff6600',
