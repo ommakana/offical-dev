@@ -1,4 +1,7 @@
-import { getDailyQuote } from '@/lib/quotes';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { getRandomQuote, Quote } from '@/lib/quotes';
 
 function QuoteIcon() {
   return (
@@ -15,30 +18,37 @@ function QuoteIcon() {
   );
 }
 
-// getDailyQuote() is pure — no side effects, no randomness — so it's safe to
-// call at module evaluation time. Same quote renders on server & client: no
-// hydration mismatch.
-const { text, author } = getDailyQuote();
-
 export function QuoteBar() {
+  // null until hydrated — avoids server/client mismatch from Math.random()
+  const [quote, setQuote] = useState<Quote | null>(null);
+
+  useEffect(() => {
+    setQuote(getRandomQuote());
+  }, []);
+
   return (
     <div
       className="border-b border-indigo-100 dark:border-indigo-900/50 bg-indigo-50 dark:bg-indigo-950/30"
       role="complementary"
       aria-label="Quote of the day"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-        <p className="flex items-start gap-2.5 text-sm text-slate-700 dark:text-slate-200 italic leading-relaxed">
-          <QuoteIcon />
-          <span>
-            {text}
-            {author && (
-              <span className="not-italic font-semibold text-indigo-600 dark:text-indigo-400 ml-1.5">
-                — {author}
-              </span>
-            )}
-          </span>
-        </p>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 min-h-[44px] flex items-center">
+        {quote ? (
+          <p className="flex items-start gap-2.5 text-sm text-slate-700 dark:text-slate-200 italic leading-relaxed animate-fade-in">
+            <QuoteIcon />
+            <span>
+              {quote.text}
+              {quote.author && (
+                <span className="not-italic font-semibold text-indigo-600 dark:text-indigo-400 ml-1.5">
+                  — {quote.author}
+                </span>
+              )}
+            </span>
+          </p>
+        ) : (
+          // Placeholder keeps the bar height stable before hydration
+          <div className="h-4 w-2/3 rounded bg-indigo-100 dark:bg-indigo-900/40 animate-pulse" />
+        )}
       </div>
     </div>
   );

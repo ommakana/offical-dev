@@ -44,12 +44,10 @@ const QUOTES: Quote[] = [
 ];
 
 /**
- * Returns a deterministic quote for the current calendar day.
- * Same quote all day; different quote tomorrow. No React state needed.
+ * Returns a random quote on every call.
+ * Call this inside useEffect (client-side) to get a fresh pick per page load
+ * without triggering a server/client hydration mismatch.
  */
-export function getDailyQuote(): Quote {
-  const now = new Date();
-  const start = new Date(now.getFullYear(), 0, 0);
-  const dayOfYear = Math.floor((now.getTime() - start.getTime()) / 86_400_000);
-  return QUOTES[dayOfYear % QUOTES.length];
+export function getRandomQuote(): Quote {
+  return QUOTES[Math.floor(Math.random() * QUOTES.length)];
 }
