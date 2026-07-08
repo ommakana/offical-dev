@@ -1,4 +1,4 @@
-import { formatDistanceToNowStrict } from 'date-fns';
+import { timeAgo } from '@/lib/timeAgo';
 import { NewsItem } from '@/types/news';
 import { SourceBadge } from './SourceBadge';
 
@@ -43,9 +43,7 @@ function ClockIcon() {
 }
 
 export function NewsCard({ item, index }: NewsCardProps) {
-  const timeAgo = formatDistanceToNowStrict(new Date(item.publishedAt), {
-    addSuffix: true,
-  });
+  const ago = timeAgo(item.publishedAt);
 
   // Staggered animation delay so cards cascade in nicely
   const delayMs = Math.min(index % 15, 8) * 40;
@@ -138,7 +136,7 @@ export function NewsCard({ item, index }: NewsCardProps) {
         </div>
 
         <div className="flex items-center gap-2 text-xs text-slate-500">
-          <span title={new Date(item.publishedAt).toLocaleString()}>{timeAgo}</span>
+          <span title={new Date(item.publishedAt).toLocaleString()}>{ago}</span>
           <a
             href={item.url}
             target="_blank"

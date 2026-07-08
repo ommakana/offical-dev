@@ -1,9 +1,18 @@
 import type { Metadata, Viewport } from 'next';
+import { Inter } from 'next/font/google';
 import './globals.css';
+
+// next/font serves Inter locally through Vercel edge — zero external request,
+// zero render-blocking, font-display:swap baked in automatically.
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
 
 export const metadata: Metadata = {
   title: 'Official Dev',
-  description: 'Your curated dev news, sport news, jobs and more — all in one place.',
+  description: 'Your curated dev news, sport news, jobs and more — in one place.',
   manifest: '/manifest.json',
 };
 
@@ -19,16 +28,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className={`dark ${inter.variable}`}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
+        {/* Preconnect to news API origins — fetches start before JS finishes */}
+        <link rel="preconnect" href="https://hacker-news.firebaseio.com" />
+        <link rel="preconnect" href="https://dev.to" />
+        <link rel="preconnect" href="https://www.reddit.com" />
+        <link rel="dns-prefetch" href="https://hacker-news.firebaseio.com" />
+        <link rel="dns-prefetch" href="https://dev.to" />
+        <link rel="dns-prefetch" href="https://www.reddit.com" />
       </head>
-      <body className="bg-surface antialiased">{children}</body>
+      <body className="bg-surface antialiased font-sans">{children}</body>
     </html>
   );
 }
