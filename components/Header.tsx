@@ -54,6 +54,14 @@ export function Header({ fetchedAt, loading, onRefresh, totalCount }: HeaderProp
                   )}
                 </p>
               )}
+              <a
+                href="https://om-makana.vercel.app/"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-1 inline-flex w-fit items-center text-[11px] font-medium text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 transition-colors"
+              >
+                <span className="font-medium">// Human in the loop:</span> <span className="ml-1 font-semibold">Om Makana</span>
+              </a>
             </div>
           </div>
 
